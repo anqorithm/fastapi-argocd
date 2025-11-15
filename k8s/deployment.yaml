@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastapi-argocd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fastapi-argocd
+  template:
+    metadata:
+      labels:
+        app: fastapi-argocd
+    spec:
+      containers:
+        - name: fastapi-argocd
+          image: localhost:32000/fastapi-argocd:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10

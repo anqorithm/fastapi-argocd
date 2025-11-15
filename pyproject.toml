@@ -1,0 +1,29 @@
+[project]
+name = "fastapi-argocd"
+version = "0.1.0"
+description = "Minimal FastAPI service for local deployment with MicroK8s, local registry, and local CI/CD."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.115.5",
+    "uvicorn[standard]>=0.32.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "httpx>=0.27.2",
+    "pytest>=8.3.3",
+]
+
+[tool.uv]
+# Keep dependencies resolved locally; uv will respect the standard PEP 621 metadata above.
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/app"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/app"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

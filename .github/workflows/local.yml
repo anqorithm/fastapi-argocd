@@ -1,0 +1,21 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker build -t localhost:32000/fastapi-argocd:latest .
+
+      - name: Push image
+        run: docker push localhost:32000/fastapi-argocd:latest
+
+      - name: Apply Kubernetes manifests
+        run: microk8s kubectl apply -f k8s/
