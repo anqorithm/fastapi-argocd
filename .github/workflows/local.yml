@@ -4,18 +4,14 @@ on:
   push:
     branches:
       - main
+  pull_request:
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
+      # Push and deploy need the microk8s registry on the local machine; Argo CD syncs k8s/ from git.
       - name: Build image
-        run: docker build -t localhost:32000/fastapi-argocd:latest .
-
-      - name: Push image
-        run: docker push localhost:32000/fastapi-argocd:latest
-
-      - name: Apply Kubernetes manifests
-        run: microk8s kubectl apply -f k8s/
+        run: docker build -t fastapi-argocd:ci .
